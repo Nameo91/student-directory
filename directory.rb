@@ -17,16 +17,6 @@ def input_students
   students
 end
 
-def letters(students)
-  puts "Please enter the first letter of name you want to see"
-  letter = gets.chomp.upcase
-  students.each do |student| 
-    if student[:name].start_with?(letter)
-      puts "#{student[:name]} (#{student[:cohort]} cohort)"
-    end
-  end
-end
-
 def print_header
   puts "The students of Villains Academy"
   puts "-------------"
@@ -38,6 +28,20 @@ def print(students)
   end
 end
 
+def letters(students)
+  #get the lette which the students name begins with
+  puts "Please enter the first letter of name you want to find"
+  letter = gets.chomp.upcase
+  students.each do |student| 
+    #only print out if the name begins with the letter
+    if student[:name].start_with?(letter)
+      puts "#{student[:name]} (#{student[:cohort]} cohort)"
+    end
+  end
+end
+
+
+
 def print_footer(names)
   puts "Overall, we have #{names.count} great students"
 end
@@ -45,6 +49,5 @@ end
 #nothing happens until we call the methods
 students = input_students
 print_header
-print(students)
 letters(students)
 print_footer(students)
