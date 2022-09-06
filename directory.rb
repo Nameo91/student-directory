@@ -1,18 +1,19 @@
+@cohorts = cohorts = ["january", "feburary", "march", "april", "may", "june", "july", "august", "september",
+  "october", "november", "december"]
+
 def input_students
   puts "Please enter the names of the students"
   puts "To finish, just hit return instead of name"
   #create an empty array
   students = []
-  cohorts = ["january", "feburary", "march", "april", "may", "june", "july", "august", "september",
-  "october", "november", "december"]
-  name = gets.chomp
+  name = gets.chomp.capitalize
   #while the name is entered, repeat this code
   while !name.empty? do
     puts "Please enter the contry where the student is from"
     country = gets.chomp.capitalize
     puts "Please enter the cohort which the student is in"
     cohort = gets.chomp
-    if cohort.empty? || !cohorts.include?(cohort)
+    if cohort.empty? || !@cohorts.include?(cohort)
       puts "Invalid. The cohort is set to september"
       cohort = "september"
     end
@@ -21,7 +22,7 @@ def input_students
     puts "Now we have #{students.count} students"
     
     puts "Please enter the name of the student"
-    name = gets.chomp
+    name = gets.chomp.capitalize
   end
   #return the array of students
   students
@@ -62,7 +63,20 @@ def name_by_length(students)
   end
 end
 
-
+def print_by_cohort(students)
+  puts
+  puts "Which cohort you want to meet"
+  cohort = gets.chomp
+  count = 0
+  students.map do |student|
+    if student[:cohort] == cohort
+      puts student[:name]
+      puts "We have #{count} students in #{cohort} cohort"
+    end
+    count += 1
+  end  
+end
+    
 def print_footer(names)
   puts "Overall, we have #{names.count} great students".center(38)
 end
@@ -71,4 +85,5 @@ end
 students = input_students
 print_header
 print(students)
+print_by_cohort(students)
 print_footer(students)
