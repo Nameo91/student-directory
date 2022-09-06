@@ -1,17 +1,21 @@
 def input_students
   puts "Please enter the names of the students"
-  puts "To finish, just hit return twice"
+  puts "To finish, just hit return three times"
   #create an empty array
   students = []
   #get the first name
   name = gets.chomp.capitalize
+  #get the country where students are from
+  puts "Please enter the country where you are from"
+  country = gets.chomp.capitalize
   #while the name is not empty, repeat this code
   while !name.empty? do
     #add the student hash to the array
-    students << {name: name, cohort: :november}
+    students << {name: name, country: country, cohort: :november}
     puts "Now we have #{students.count} students"
     #get another name from the user
     name = gets.chomp.capitalize
+    country = gets.chomp.capitalize
   end
   #return the array of students
   students
@@ -23,11 +27,11 @@ def print_header
 end
 
 def print(students)
-  counter = 0
-  while counter < students.count
+  i = 0
+  while i < students.count
     #set count as index of students array
-    puts "#{counter+1}. #{students[counter][:name]} (#{students[counter][:cohort]} cohort)"
-    counter += 1
+    puts "#{i+1}. #{students[i][:name]} from #{students[i][:country]} (#{students[i][:cohort]} cohort)"
+    i += 1
   end
 end
 
@@ -38,7 +42,7 @@ def letters(students)
   students.each do |student| 
     #only print out if the name begins with the letter
     if student[:name].start_with?(letter)
-      puts "#{student[:name]} (#{student[:cohort]} cohort)"
+      puts "#{student[:name]} from #{students[i][:country]} (#{student[:cohort]} cohort)"
     end
   end
 end
@@ -47,7 +51,7 @@ def name_by_length(students)
   puts "The students whose name is shorter than 12: "
   students.each do |student|
     if student[:name].gsub(/\s+/,"").length < 12
-      puts "#{student[:name]} (#{student[:cohort]} cohort)"
+      puts "#{student[:name]} from #{students[i][:country]} (#{student[:cohort]} cohort)"
     end
   end
 end
