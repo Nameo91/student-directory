@@ -19,8 +19,11 @@ def input_students
     end
     
     students << {name: name, country: country.to_sym, cohort: cohort}
+    if students.count > 1
     puts "Now we have #{students.count} students"
-    
+    else 
+    puts "Now we have #{students.count} student"
+    end
     puts "Please enter the name of the student"
     name = gets.chomp.capitalize
   end
@@ -71,7 +74,11 @@ def print_by_cohort(students)
   students.map do |student|
     if student[:cohort] == cohort
       puts student[:name]
+      if count > 1
       puts "We have #{count} students in #{cohort} cohort"
+      else
+      puts "We have #{count} student in #{cohort} cohort" 
+      end
     end
     count += 1
   end  
