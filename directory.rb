@@ -1,21 +1,27 @@
 def input_students
   puts "Please enter the names of the students"
-  puts "To finish, just hit return three times"
+  puts "To finish, just hit return instead of name"
   #create an empty array
   students = []
-  #get the first name
-  name = gets.chomp.capitalize
-  #get the country where students are from
-  puts "Please enter the country where you are from"
-  country = gets.chomp.capitalize
-  #while the name is not empty, repeat this code
+  cohorts = ["january", "feburary", "march", "april", "may", "june", "july", "august", "september",
+  "october", "november", "december"]
+  name = gets.chomp
+  #while the name is entered, repeat this code
   while !name.empty? do
-    #add the student hash to the array
-    students << {name: name, country: country, cohort: :november}
-    puts "Now we have #{students.count} students"
-    #get another name from the user
-    name = gets.chomp.capitalize
+    puts "Please enter the contry where the student is from"
     country = gets.chomp.capitalize
+    puts "Please enter the cohort which the student is in"
+    cohort = gets.chomp
+    if cohort.empty? || !cohorts.include?(cohort)
+      puts "Invalid. The cohort is set to september"
+      cohort = "september"
+    end
+    
+    students << {name: name, country: country.to_sym, cohort: cohort}
+    puts "Now we have #{students.count} students"
+    
+    puts "Please enter the name of the student"
+    name = gets.chomp
   end
   #return the array of students
   students
@@ -42,7 +48,7 @@ def letters(students)
   students.each do |student| 
     #only print out if the name begins with the letter
     if student[:name].start_with?(letter)
-      puts "#{student[:name]} from #{students[i][:country]} (#{student[:cohort]} cohort)"
+      puts "#{student[:name]} from #{students[:country]} (#{student[:cohort]} cohort)"
     end
   end
 end
@@ -51,7 +57,7 @@ def name_by_length(students)
   puts "The students whose name is shorter than 12: "
   students.each do |student|
     if student[:name].gsub(/\s+/,"").length < 12
-      puts "#{student[:name]} from #{students[i][:country]} (#{student[:cohort]} cohort)"
+      puts "#{student[:name]} from #{students[:country]} (#{student[:cohort]} cohort)"
     end
   end
 end
