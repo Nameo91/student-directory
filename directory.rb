@@ -40,6 +40,14 @@ def letters(students)
   end
 end
 
+def name_by_length(students)
+  puts "The students whose name is shorter than 12"
+  students.each do |student|
+    if student[:name].gsub(/\s+/,"").length < 12
+      puts "#{student[:name]} (#{student[:cohort]} cohort)"
+    end
+  end
+end
 
 
 def print_footer(names)
@@ -49,5 +57,6 @@ end
 #nothing happens until we call the methods
 students = input_students
 print_header
-letters(students)
+print(students)
+name_by_length(students)
 print_footer(students)
