@@ -6,7 +6,7 @@ def input_students
   puts "To finish, just hit return instead of name"
   #create an empty array
   students = []
-  name = gets.chomp.capitalize
+  name = gets.strip.capitalize
   #while the name is entered, repeat this code
   while !name.empty? do
     puts "Please enter the contry where the student is from"
@@ -25,7 +25,7 @@ def input_students
     puts "Now we have #{students.count} student"
     end
     puts "Please enter the name of the student"
-    name = gets.chomp.capitalize
+    name = gets.strip.capitalize
   end
   #return the array of students
   students
