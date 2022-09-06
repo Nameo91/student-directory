@@ -23,8 +23,11 @@ def print_header
 end
 
 def print(students)
-  students.each_with_index do |student, i|
-    puts "#{i+1}. #{student[:name]} (#{student[:cohort]} cohort)"
+  counter = 0
+  while counter < students.count
+    #set count as index of students array
+    puts "#{counter+1}. #{students[counter][:name]} (#{students[counter][:cohort]} cohort)"
+    counter += 1
   end
 end
 
@@ -41,7 +44,7 @@ def letters(students)
 end
 
 def name_by_length(students)
-  puts "The students whose name is shorter than 12"
+  puts "The students whose name is shorter than 12: "
   students.each do |student|
     if student[:name].gsub(/\s+/,"").length < 12
       puts "#{student[:name]} (#{student[:cohort]} cohort)"
@@ -58,5 +61,4 @@ end
 students = input_students
 print_header
 print(students)
-name_by_length(students)
 print_footer(students)
