@@ -2,36 +2,6 @@
   "october", "november", "december"]
 @students = [] #an empty array accessible to all methods
 
-def input_students
-  puts "Please enter the names of the students"
-  puts "To finish, just hit return instead of name"
-  while name = gets.strip.capitalize do
-    break if name == ""
-    puts "Please enter the contry where the student is from"
-    country = gets.chomp.capitalize
-    puts "Please enter the cohort which the student is in"
-    cohort = gets.chomp
-    if cohort.empty? || !@cohorts.include?(cohort)
-      puts "Invalid. The cohort is set to september"
-      cohort = "september"
-    end
-    
-    @students << {name: name, country: country, cohort: cohort.to_sym}
-    if @students.count > 1
-    puts "Now we have #{@students.count} students"
-    else 
-    puts "Now we have #{@students.count} student"
-    end
-  end
-end
-
-def interative_menu
-  loop do 
-    print_menu
-    process(gets.chomp)
-  end
-end
-
 def print_menu
   puts "1. Input the students"
   puts "2. Show the students"
@@ -40,13 +10,11 @@ def print_menu
   puts "9. Exit" #9 because we'll be adding more items
 end
 
-def show_students
-  print_header
-  print_students_list
-  print_footer
-  letters
-  name_by_length
-  print_by_cohort
+def interative_menu
+  loop do 
+    print_menu
+    process(STDIN.gets.chomp)
+  end
 end
 
 def process(selection)
@@ -66,6 +34,41 @@ def process(selection)
   end
 end
 
+def input_students
+  puts "Please enter the names of the students"
+  
+  while name = STDIN.gets.chomp.capitalize do
+    break if name == ""
+    puts "Please enter the contry where the student is from"
+    country = STDIN.gets.chomp.capitalize
+    puts "Please enter the cohort which the student is in"
+    cohort = STDIN.gets.chomp
+    if cohort.empty? || !@cohorts.include?(cohort)
+      puts "Invalid. The cohort is set to september"
+      cohort = "september"
+    end
+    students_hash(name, country, cohort)
+    if @students.count > 1
+    puts "Now we have #{@students.count} students"
+    else 
+    puts "Now we have #{@students.count} student"
+    end
+  end
+end
+
+def students_hash(name, country, cohort)
+  @students << {name: name, country: country, cohort: cohort.to_sym}
+end
+
+def show_students
+  print_header
+  print_students_list
+  letters
+  name_by_length
+  print_by_cohort
+  print_footer
+end
+
 def print_header
   puts "The students of Villains Academy"
   puts "------------".center(32)  
@@ -82,7 +85,7 @@ end
 def letters
   unless @students.size < 1
     puts "Please enter the first letter of name you want to find"
-    letter = gets.chomp.upcase
+    letter = STDIN.gets.chomp.upcase
     @students.each do |student| 
       if student[:name].start_with?(letter)
         puts "#{student[:name]} from #{student[:country]} (#{student[:cohort]} cohort)"
@@ -105,7 +108,7 @@ end
 def print_by_cohort
   unless @students.size < 1
   puts "Which cohort you want to meet"
-    cohort = gets.chomp
+    cohort = STDIN.gets.chomp.to_sym
     @students.map do |student|
       if student[:cohort] == cohort
         puts student[:name]
@@ -135,13 +138,26 @@ def save_students
   file.close
 end
 
-def load_students
-  file = File.open("students.csv", "r")
+def load_students(filename = "students.csv")
+  file = File.open(filename, "r")
   file.readlines.each do |line|
     name, country, cohort = line.chomp.split(',')
-      @students << {name: name, country: country, cohort: cohort.to_sym}
+    students_hash(name, country, cohort)
   end
   file.close
 end
 
+def try_load_students
+  filename = ARGV.first #first argument from the command line
+  return if filename.nil? #get out of the method if it isn't given
+  if File.exist?(filename)
+    load_students(filename)
+      puts "Loaded #{@students.count} from #{filename}"
+  else #if it doesn't exist
+    puts "Sorry, #{filename} doesn't exist."
+    exit 
+  end
+end
+
+try_load_students
 interative_menu
