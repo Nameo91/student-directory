@@ -25,19 +25,6 @@ def input_students
   end
 end
 
-#saving data from the file
-def save_students
-  #open the file for writing
-  file = File.open("students.csv", "w")
-  #iterate over the array of students
-  @students.each do |student|
-    student_data = [student[:name], student[:country], student[:cohort]]
-    csv_line = student_data.join(",")
-    file.puts csv_line
-  end
-  file.close
-end
-
 def interative_menu
   loop do 
     print_menu
@@ -48,10 +35,8 @@ end
 def print_menu
   puts "1. Input the students"
   puts "2. Show the students"
-  puts "3. Show the students by the first letter of thier name"
-  puts "4. Show the students whose name is shorter than 12 characters"
-  puts "5. Show the students in the same cohort"
-  puts "6. Save the list to students.csv"
+  puts "3. Save the list to students.csv"
+  puts "4. Load the list from students.csv"
   puts "9. Exit" #9 because we'll be adding more items
 end
 
@@ -59,6 +44,9 @@ def show_students
   print_header
   print_students_list
   print_footer
+  letters
+  name_by_length
+  print_by_cohort
 end
 
 def process(selection)
@@ -68,13 +56,9 @@ def process(selection)
     when "2"
       show_students
     when "3"
-      letters
-    when "4"
-      name_by_length
-    when "5"
-      print_by_cohort
-    when "6"
       save_students
+    when "4"
+      load_students
     when "9"
       exit # this will cause the program to terminate
     else 
@@ -136,6 +120,28 @@ def print_footer
   elsif @students.count == 1
   puts "Overall, we have #{@students.count} great student".center(38)
   end
+end
+
+#saving data from the file
+def save_students
+  #open the file for writing
+  file = File.open("students.csv", "w")
+  #iterate over the array of students
+  @students.each do |student|
+    student_data = [student[:name], student[:country], student[:cohort]]
+    csv_line = student_data.join(",")
+    file.puts csv_line
+  end
+  file.close
+end
+
+def load_students
+  file = File.open("students.csv", "r")
+  file.readlines.each do |line|
+    name, country, cohort = line.chomp.split(',')
+      @students << {name: name, country: country, cohort: cohort.to_sym}
+  end
+  file.close
 end
 
 interative_menu
