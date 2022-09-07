@@ -2,30 +2,35 @@
   "october", "november", "december"]
 @students = [] #an empty array accessible to all methods
 
-def print_menu
+def print_main
+  puts "Main Menu"
   puts "1. Input the students"
   puts "2. Show the students"
-  puts "3. Save the list to students.csv"
-  puts "4. Load the list from students.csv"
-  puts "9. Exit" #9 because we'll be adding more items
+  puts "3. Search the students"
+  puts "4. Save the list to students.csv"
+  puts "5. Load the list from students.csv"
+  puts "9. Exit" 
 end
 
-def interative_menu
+def interative_main
   loop do 
-    print_menu
-    process(STDIN.gets.chomp)
+    print_main
+    process_main(STDIN.gets.chomp)
   end
 end
 
-def process(selection)
+def process_main(selection)
   case selection
     when "1"
       input_students
+      total_students_number
     when "2"
       show_students
     when "3"
-      save_students
+      interative_search
     when "4"
+      save_students
+    when "5"
       load_students
     when "9"
       exit # this will cause the program to terminate
@@ -34,9 +39,38 @@ def process(selection)
   end
 end
 
+def print_search
+  puts "Students Search"
+  puts "1. Search by First letter"
+  puts "2. Search by Name less than 12 characters"
+  puts "3. Search by cohort"
+  puts "4. Back to Main Menu"
+end
+
+def interative_search
+  loop do 
+    print_search
+    process_search(STDIN.gets.chomp)
+  end
+end
+
+def process_search(selection)
+  case selection
+    when "1"
+      letters
+    when "2"
+      name_by_length
+    when "3"
+      print_by_cohort
+    when "4"
+      interative_main
+    else 
+      puts "I don't know what you meant, try again"
+  end
+end    
+      
 def input_students
   puts "Please enter the names of the students"
-  
   while name = STDIN.gets.chomp.capitalize do
     break if name == ""
     puts "Please enter the contry where the student is from"
@@ -48,12 +82,15 @@ def input_students
       cohort = "september"
     end
     students_hash(name, country, cohort)
+  end
+end
+
+def total_students_number
     if @students.count > 1
     puts "Now we have #{@students.count} students"
     else 
     puts "Now we have #{@students.count} student"
     end
-  end
 end
 
 def students_hash(name, country, cohort)
@@ -63,9 +100,6 @@ end
 def show_students
   print_header
   print_students_list
-  letters
-  name_by_length
-  print_by_cohort
   print_footer
 end
 
@@ -162,4 +196,4 @@ def try_load_students
 end
 
 try_load_students
-interative_menu
+interative_main
