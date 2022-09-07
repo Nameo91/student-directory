@@ -60,7 +60,7 @@ end
 
 def name_by_length(students)
   if students.size > 1
-    puts "The students whose name is shorter than 12: "
+    puts "The students whose name is shorter than 12 characters: "
     students.each do |student|
       if student[:name].gsub(/\s+/,"").length < 12
         puts "#{student[:name]} from #{student[:country]} (#{student[:cohort]} cohort)"
@@ -89,11 +89,40 @@ def print_footer(names)
   end
 end
 
-#nothing happens until we call the methods
-students = input_students
-print_header
-print(students)
-letters(students)
-name_by_length(students)
-print_by_cohort(students)
-print_footer(students)
+def interative_menu
+  loop do
+  # 1. print the menu and ask the user what to do
+  puts "1. Input the students"
+  puts "2. Show the students"
+  puts "3. Show the students by the first letter of thier name"
+  puts "4. Show the students whose name is shorter than 12 characters"
+  puts "5. Show the students in the same cohort"
+  puts "9. Exit" #9 because we'll be adding more items
+  # 2. read the input and save it into a variable
+  selection = gets.chomp
+  # 3. do what the user has asked
+  case selection
+    when "1"
+      students = input_students
+    when "2"
+      #show the students
+      students = input_students
+      print_header
+      print(students)
+      print_footer(students)
+    when "3"
+      letters(students)
+    when "4"
+      name_by_length(students)
+    when "5"
+      print_by_cohort(students)
+    when "9"
+      exit # this will cause the program to terminate
+    else 
+      puts "I don't know what you meant, try again"
+  end
+  # 4. repeat from step 1
+  end
+end
+
+interative_menu
