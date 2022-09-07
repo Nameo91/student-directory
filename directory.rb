@@ -16,13 +16,26 @@ def input_students
       cohort = "september"
     end
     
-    @students << {name: name, country: country.to_sym, cohort: cohort}
+    @students << {name: name, country: country, cohort: cohort.to_sym}
     if @students.count > 1
     puts "Now we have #{@students.count} students"
     else 
     puts "Now we have #{@students.count} student"
     end
   end
+end
+
+#saving data from the file
+def save_students
+  #open the file for writing
+  file = File.open("students.csv", "w")
+  #iterate over the array of students
+  @students.each do |student|
+    student_data = [student[:name], student[:country], student[:cohort]]
+    csv_line = student_data.join(",")
+    file.puts csv_line
+  end
+  file.close
 end
 
 def interative_menu
@@ -38,6 +51,7 @@ def print_menu
   puts "3. Show the students by the first letter of thier name"
   puts "4. Show the students whose name is shorter than 12 characters"
   puts "5. Show the students in the same cohort"
+  puts "6. Save the list to students.csv"
   puts "9. Exit" #9 because we'll be adding more items
 end
 
@@ -59,6 +73,8 @@ def process(selection)
       name_by_length
     when "5"
       print_by_cohort
+    when "6"
+      save_students
     when "9"
       exit # this will cause the program to terminate
     else 
