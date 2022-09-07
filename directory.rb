@@ -1,11 +1,10 @@
 @cohorts = ["january", "feburary", "march", "april", "may", "june", "july", "august", "september",
   "october", "november", "december"]
+@students = [] #an empty array accessible to all methods
 
 def input_students
   puts "Please enter the names of the students"
   puts "To finish, just hit return instead of name"
-  #create an empty array
-  students = []
   #while the name is entered, repeat this code
   while name = gets.strip.capitalize do
     break if name == ""
@@ -18,16 +17,13 @@ def input_students
       cohort = "september"
     end
     
-    students << {name: name, country: country.to_sym, cohort: cohort}
-    if students.count > 1
-    puts "Now we have #{students.count} students"
+    @students << {name: name, country: country.to_sym, cohort: cohort}
+    if @students.count > 1
+    puts "Now we have #{@students.count} students"
     else 
-    puts "Now we have #{students.count} student"
+    puts "Now we have #{@students.count} student"
     end
-    puts "Please enter the name of the student"
   end
-  #return the array of students
-  students
 end
 
 def print_header
@@ -35,21 +31,21 @@ def print_header
   puts "------------".center(32)  
 end
 
-def print(students)
-  if students.size > 1  
+def print
+  unless @students.count < 1  
     #set count as index of students array
-    students.each_with_index do |student, i|
-      puts "#{i+1}. #{students[i][:name]} from #{students[i][:country]} (#{students[i][:cohort]} cohort)"
+    @students.each_with_index do |student, i|
+      puts "#{i+1}. #{student[:name]} from #{student[:country]} (#{student[:cohort]} cohort)"
     end
   end
 end
 
-def letters(students)
-  if students.size > 1
+def letters
+  unless @students.size < 1
   #get the lette which the students name begins with
     puts "Please enter the first letter of name you want to find"
     letter = gets.chomp.upcase
-    students.each do |student| 
+    @students.each do |student| 
     #only print out if the name begins with the letter
       if student[:name].start_with?(letter)
         puts "#{student[:name]} from #{student[:country]} (#{student[:cohort]} cohort)"
@@ -58,10 +54,10 @@ def letters(students)
   end
 end
 
-def name_by_length(students)
-  if students.size > 1
+def name_by_length
+  unless @students.size < 1
     puts "The students whose name is shorter than 12 characters: "
-    students.each do |student|
+    @students.each do |student|
       if student[:name].gsub(/\s+/,"").length < 12
         puts "#{student[:name]} from #{student[:country]} (#{student[:cohort]} cohort)"
       end
@@ -69,11 +65,11 @@ def name_by_length(students)
   end
 end
 
-def print_by_cohort(students)
-  if students.size > 1
+def print_by_cohort
+  unless @students.size < 1
   puts "Which cohort you want to meet"
     cohort = gets.chomp
-    students.map do |student|
+    @students.map do |student|
       if student[:cohort] == cohort
         puts student[:name]
       end
@@ -81,11 +77,11 @@ def print_by_cohort(students)
   end
 end
     
-def print_footer(names)
-  if names.count > 1 
-  puts "Overall, we have #{names.count} great students".center(38)
-  elsif names.count == 1
-  puts "Overall, we have #{names.count} great student".center(38)
+def print_footer
+  if @students.count > 1 
+  puts "Overall, we have #{@students.count} great students".center(38)
+  elsif @students.count == 1
+  puts "Overall, we have #{@students.count} great student".center(38)
   end
 end
 
@@ -98,24 +94,23 @@ def interative_menu
   puts "4. Show the students whose name is shorter than 12 characters"
   puts "5. Show the students in the same cohort"
   puts "9. Exit" #9 because we'll be adding more items
-  # 2. read the input and save it into a variable
+
   selection = gets.chomp
-  # 3. do what the user has asked
+
   case selection
     when "1"
-      students = input_students
+      input_students
     when "2"
       #show the students
-      students = input_students
       print_header
-      print(students)
-      print_footer(students)
+      print
+      print_footer
     when "3"
-      letters(students)
+      letters
     when "4"
-      name_by_length(students)
+      name_by_length
     when "5"
-      print_by_cohort(students)
+      print_by_cohort
     when "9"
       exit # this will cause the program to terminate
     else 
@@ -126,3 +121,6 @@ def interative_menu
 end
 
 interative_menu
+
+
+
