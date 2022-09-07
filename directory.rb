@@ -5,7 +5,6 @@
 def input_students
   puts "Please enter the names of the students"
   puts "To finish, just hit return instead of name"
-  #while the name is entered, repeat this code
   while name = gets.strip.capitalize do
     break if name == ""
     puts "Please enter the contry where the student is from"
@@ -26,14 +25,54 @@ def input_students
   end
 end
 
+def interative_menu
+  loop do 
+    print_menu
+    process(gets.chomp)
+  end
+end
+
+def print_menu
+  puts "1. Input the students"
+  puts "2. Show the students"
+  puts "3. Show the students by the first letter of thier name"
+  puts "4. Show the students whose name is shorter than 12 characters"
+  puts "5. Show the students in the same cohort"
+  puts "9. Exit" #9 because we'll be adding more items
+end
+
+def show_students
+  print_header
+  print_students_list
+  print_footer
+end
+
+def process(selection)
+  case selection
+    when "1"
+      input_students
+    when "2"
+      show_students
+    when "3"
+      letters
+    when "4"
+      name_by_length
+    when "5"
+      print_by_cohort
+    when "9"
+      exit # this will cause the program to terminate
+    else 
+      puts "I don't know what you meant, try again"
+  end
+end
+
 def print_header
   puts "The students of Villains Academy"
   puts "------------".center(32)  
 end
 
-def print
+def print_students_list
   unless @students.count < 1  
-    #set count as index of students array
     @students.each_with_index do |student, i|
       puts "#{i+1}. #{student[:name]} from #{student[:country]} (#{student[:cohort]} cohort)"
     end
@@ -42,11 +81,9 @@ end
 
 def letters
   unless @students.size < 1
-  #get the lette which the students name begins with
     puts "Please enter the first letter of name you want to find"
     letter = gets.chomp.upcase
     @students.each do |student| 
-    #only print out if the name begins with the letter
       if student[:name].start_with?(letter)
         puts "#{student[:name]} from #{student[:country]} (#{student[:cohort]} cohort)"
       end
@@ -85,42 +122,4 @@ def print_footer
   end
 end
 
-def interative_menu
-  loop do
-  # 1. print the menu and ask the user what to do
-  puts "1. Input the students"
-  puts "2. Show the students"
-  puts "3. Show the students by the first letter of thier name"
-  puts "4. Show the students whose name is shorter than 12 characters"
-  puts "5. Show the students in the same cohort"
-  puts "9. Exit" #9 because we'll be adding more items
-
-  selection = gets.chomp
-
-  case selection
-    when "1"
-      input_students
-    when "2"
-      #show the students
-      print_header
-      print
-      print_footer
-    when "3"
-      letters
-    when "4"
-      name_by_length
-    when "5"
-      print_by_cohort
-    when "9"
-      exit # this will cause the program to terminate
-    else 
-      puts "I don't know what you meant, try again"
-  end
-  # 4. repeat from step 1
-  end
-end
-
 interative_menu
-
-
-
