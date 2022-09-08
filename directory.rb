@@ -1,14 +1,15 @@
 @cohorts = ["january", "feburary", "march", "april", "may", "june", "july", "august", "september",
   "october", "november", "december"]
 @students = [] #an empty array accessible to all methods
+@default_file = "students.csv"
 
 def print_main
   puts "Main Menu"
   puts "1. Input the students"
   puts "2. Show the students"
   puts "3. Search the students"
-  puts "4. Save the list to students.csv"
-  puts "5. Load the list from students.csv"
+  puts "4. Save the list to #{@default_file}"
+  puts "5. Load the list from #{@default_file}"
   puts "9. Exit" 
 end
 
@@ -161,8 +162,7 @@ end
 
 #saving data from the file
 def save_students
-  #open the file for writing
-  file = File.open("students.csv", "w")
+  file = File.open(@default_file, "w") #open the file for writing
   #iterate over the array of students
   @students.each do |student|
     student_data = [student[:name], student[:country], student[:cohort]]
@@ -170,21 +170,27 @@ def save_students
     file.puts csv_line
   end
   file.close
+  puts "------------".center(23)
+  puts "File saved successfully"
+  puts "------------".center(23)
 end
 
-def load_students(filename = "students.csv")
+def load_students(filename = @default_file)
   file = File.open(filename, "r")
   file.readlines.each do |line|
     name, country, cohort = line.chomp.split(',')
     students_hash(name, country, cohort)
   end
   file.close
+  puts "-------------".center(36)
+  puts "#{@default_file} loaded successfully"
+  puts "-------------".center(36)
 end
 
 def try_load_students
   filename = ARGV.first #first argument from the command line
   if filename.nil? #students.csv is a default if it isn't given
-    puts "Students.csv file is loaded"
+    puts "Default file: #{@default_file} file is loaded"
     load_students
   elsif File.exist?(filename)
     load_students(filename)
