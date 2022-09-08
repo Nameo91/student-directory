@@ -8,8 +8,8 @@ def print_main
   puts "1. Input the students"
   puts "2. Show the students"
   puts "3. Search the students"
-  puts "4. Save the list to #{@default_file}"
-  puts "5. Load the list from #{@default_file}"
+  puts "4. Save the list to file"
+  puts "5. Load the list from file"
   puts "9. Exit" 
 end
 
@@ -30,9 +30,13 @@ def process_main(selection)
     when "3"
       interative_search
     when "4"
-      save_students
+      puts "Please enter the name of file to save(eg. students.csv)"
+      saved_file = gets.chomp
+      saved_file.empty? ? save_students : save_students(saved_file)
     when "5"
-      load_students
+      puts "Please enter the name of file to load(eg. students.csv)"
+      loaded_file = gets.chomp
+      loaded_file.empty? ? load_students : load_students(loaded_file)
     when "9"
       exit # this will cause the program to terminate
     else 
@@ -161,30 +165,30 @@ def print_footer
 end
 
 #saving data from the file
-def save_students
-  file = File.open(@default_file, "w") #open the file for writing
+def save_students(filename = @default_file)
+  File.open(filename, "w") do |file| #open the file for writing
   #iterate over the array of students
-  @students.each do |student|
-    student_data = [student[:name], student[:country], student[:cohort]]
-    csv_line = student_data.join(",")
-    file.puts csv_line
+    @students.each do |student|
+      student_data = [student[:name], student[:country], student[:cohort]]
+      csv_line = student_data.join(",")
+      file.puts csv_line
+    end
+    puts "------------".center(23)
+    puts "Saved successfully to #{filename}"
+    puts "------------".center(23)
   end
-  file.close
-  puts "------------".center(23)
-  puts "File saved successfully"
-  puts "------------".center(23)
 end
 
 def load_students(filename = @default_file)
-  file = File.open(filename, "r")
+  File.open(filename, "r") do |file|
   file.readlines.each do |line|
     name, country, cohort = line.chomp.split(',')
     students_hash(name, country, cohort)
   end
-  file.close
   puts "-------------".center(36)
-  puts "#{@default_file} loaded successfully"
+  puts "#{filename} loaded successfully"
   puts "-------------".center(36)
+  end
 end
 
 def try_load_students
