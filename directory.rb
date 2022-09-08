@@ -1,3 +1,4 @@
+require 'csv'
 @cohorts = ["january", "feburary", "march", "april", "may", "june", "july", "august", "september",
   "october", "november", "december"]
 @students = [] #an empty array accessible to all methods
@@ -86,7 +87,7 @@ def input_students
       puts "Invalid. The cohort is set to september"
       cohort = "september"
     end
-    students_hash(name, country, cohort)
+    add_students(name, country, cohort)
   end
 end
 
@@ -98,7 +99,7 @@ def total_students_number
     end
 end
 
-def students_hash(name, country, cohort)
+def add_students(name, country, cohort)
   @students << {name: name, country: country, cohort: cohort.to_sym}
 end
 
@@ -166,12 +167,11 @@ end
 
 #saving data from the file
 def save_students(filename = @default_file)
-  File.open(filename, "w") do |file| #open the file for writing
+  #open the CSV file for writing
+  CSV.open(filename, "wb") do |csv|
   #iterate over the array of students
     @students.each do |student|
-      student_data = [student[:name], student[:country], student[:cohort]]
-      csv_line = student_data.join(",")
-      file.puts csv_line
+      csv << [student[:name], student[:country], student[:cohort]]
     end
     puts "------------".center(23)
     puts "Saved successfully to #{filename}"
@@ -180,10 +180,10 @@ def save_students(filename = @default_file)
 end
 
 def load_students(filename = @default_file)
-  File.open(filename, "r") do |file|
-  file.readlines.each do |line|
-    name, country, cohort = line.chomp.split(',')
-    students_hash(name, country, cohort)
+  if File.exist?(filename)
+  CSV.foreach(filename, "r") do |row|
+    name, country, cohort = row
+    add_students(name, country, cohort)
   end
   puts "-------------".center(36)
   puts "#{filename} loaded successfully"
@@ -196,7 +196,9 @@ def try_load_students
   if filename.nil? #students.csv is a default if it isn't given
     puts "Default file: #{@default_file} file is loaded"
     load_students
-  elsif File.exist?(filename)
+    return
+  end
+  if File.exist?(filename)
     load_students(filename)
       puts "Loaded #{@students.count} from #{filename}"
   else #if it doesn't exist
